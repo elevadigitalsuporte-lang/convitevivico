@@ -84,7 +84,7 @@ export default function AdminDashboard() {
 
   if (!isAuthenticated) {
     return (
-      <main className="container" style={{ display: 'flex', alignItems: 'center', height: '100vh' }}>
+      <main className="container" style={{ display: 'flex', alignItems: 'center', height: '100vh', backgroundColor: 'var(--bg-color)', color: 'var(--text-primary)' }}>
         <div className="glass-card" style={{ width: '100%' }}>
           <h2 className="title" style={{ fontSize: '2rem' }}>Acesso Restrito</h2>
           <form onSubmit={handleLogin} style={{ marginTop: '2rem' }}>
@@ -106,8 +106,9 @@ export default function AdminDashboard() {
   }
 
   return (
-    <main className="admin-container">
-      <div className="dashboard-header">
+    <div style={{ backgroundColor: 'var(--bg-color)', color: 'var(--text-primary)', minHeight: '100vh' }}>
+      <main className="admin-container">
+        <div className="dashboard-header">
         <h1 className="title" style={{ margin: 0 }}>Dashboard Admin</h1>
         <button onClick={handleLogout} className="btn btn-secondary btn-small" style={{ width: 'auto' }}>Sair</button>
       </div>
@@ -219,6 +220,7 @@ export default function AdminDashboard() {
           </div>
         </div>
       )}
-    </main>
+      </main>
+    </div>
   )
 }
