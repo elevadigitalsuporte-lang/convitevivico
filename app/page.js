@@ -95,13 +95,118 @@ export default function Home() {
           </h1>
         </div>
 
-        {/* --- NÚMERO 1 --- */}
-        <div className="relative z-10 mt-4 mb-2 flex justify-center">
-          <img
-            src="/numero-1.png"
-            alt="1 Aninho"
-            className="h-36 object-contain drop-shadow-2xl hover:scale-105 transition-transform duration-300"
-          />
+        {/* --- SEÇÃO 1 ANO - HERO VISUAL --- */}
+        <div className="relative z-10 w-full overflow-hidden" style={{ background: 'linear-gradient(180deg, #0a1628 0%, #0d2461 40%, #1a0a2e 100%)' }}>
+
+          {/* Radial glow central */}
+          <div className="absolute inset-0 pointer-events-none" style={{
+            background: 'radial-gradient(ellipse 70% 60% at 50% 55%, rgba(220,38,38,0.35) 0%, rgba(37,99,235,0.25) 50%, transparent 100%)'
+          }} />
+
+          {/* Teia decorativa SVG - canto esquerdo */}
+          <svg className="absolute left-0 top-0 w-28 h-28 opacity-20" viewBox="0 0 100 100" fill="none">
+            <line x1="50" y1="0" x2="0" y2="100" stroke="white" strokeWidth="0.8"/>
+            <line x1="50" y1="0" x2="50" y2="100" stroke="white" strokeWidth="0.8"/>
+            <line x1="50" y1="0" x2="100" y2="100" stroke="white" strokeWidth="0.8"/>
+            <path d="M50 15 Q25 30 10 50 Q25 70 50 80 Q75 70 90 50 Q75 30 50 15Z" stroke="white" strokeWidth="0.6" fill="none"/>
+            <path d="M50 30 Q30 40 22 55 Q30 70 50 75 Q70 70 78 55 Q70 40 50 30Z" stroke="white" strokeWidth="0.6" fill="none"/>
+          </svg>
+
+          {/* Teia decorativa SVG - canto direito */}
+          <svg className="absolute right-0 top-0 w-28 h-28 opacity-20" viewBox="0 0 100 100" fill="none" style={{ transform: 'scaleX(-1)' }}>
+            <line x1="50" y1="0" x2="0" y2="100" stroke="white" strokeWidth="0.8"/>
+            <line x1="50" y1="0" x2="50" y2="100" stroke="white" strokeWidth="0.8"/>
+            <line x1="50" y1="0" x2="100" y2="100" stroke="white" strokeWidth="0.8"/>
+            <path d="M50 15 Q25 30 10 50 Q25 70 50 80 Q75 70 90 50 Q75 30 50 15Z" stroke="white" strokeWidth="0.6" fill="none"/>
+            <path d="M50 30 Q30 40 22 55 Q30 70 50 75 Q70 70 78 55 Q70 40 50 30Z" stroke="white" strokeWidth="0.6" fill="none"/>
+          </svg>
+
+          {/* Estrelinhas decorativas */}
+          {[
+            { top: '10%', left: '12%', size: 18, delay: '0s' },
+            { top: '20%', left: '80%', size: 14, delay: '0.4s' },
+            { top: '65%', left: '8%', size: 12, delay: '0.8s' },
+            { top: '70%', left: '85%', size: 16, delay: '0.2s' },
+            { top: '45%', left: '90%', size: 10, delay: '1s' },
+            { top: '50%', left: '5%', size: 11, delay: '0.6s' },
+          ].map((star, i) => (
+            <div key={i} className="absolute pointer-events-none" style={{
+              top: star.top, left: star.left,
+              animation: `twinkle 2s ease-in-out infinite alternate`,
+              animationDelay: star.delay,
+            }}>
+              <svg width={star.size} height={star.size} viewBox="0 0 24 24" fill="none">
+                <path d="M12 2L13.5 9.5L21 11L13.5 12.5L12 20L10.5 12.5L3 11L10.5 9.5L12 2Z" fill="#FFD700" opacity="0.9"/>
+              </svg>
+            </div>
+          ))}
+
+          {/* Badge "PRIMEIRO ANIVERSÁRIO" */}
+          <div className="relative flex justify-center pt-5 pb-1">
+            <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-5 py-1.5">
+              <span className="text-sm">🕷️</span>
+              <span className="text-white/90 text-xs font-black uppercase tracking-[0.2em]" style={{ fontFamily: "'Nunito', sans-serif" }}>
+                Primeiro Aniversário
+              </span>
+              <span className="text-sm">🕷️</span>
+            </div>
+          </div>
+
+          {/* Número 1 centralizado com glow */}
+          <div className="relative flex justify-center items-center py-2">
+            {/* Anel de glow atrás do número */}
+            <div className="absolute w-44 h-44 rounded-full" style={{
+              background: 'radial-gradient(circle, rgba(220,38,38,0.5) 0%, rgba(37,99,235,0.3) 50%, transparent 70%)',
+              filter: 'blur(20px)',
+            }} />
+            <img
+              src="/numero-1.png"
+              alt="1 Aninho"
+              className="relative h-40 object-contain"
+              style={{
+                filter: 'drop-shadow(0 0 20px rgba(220,38,38,0.8)) drop-shadow(0 0 40px rgba(37,99,235,0.5)) drop-shadow(0 8px 16px rgba(0,0,0,0.6))',
+                animation: 'floatNum 3s ease-in-out infinite',
+              }}
+            />
+          </div>
+
+          {/* Label "ANO" em destaque */}
+          <div className="relative flex justify-center pb-2">
+            <div className="flex flex-col items-center gap-1">
+              <div className="flex items-center gap-3">
+                <div className="h-px w-12 bg-gradient-to-r from-transparent to-yellow-400/80" />
+                <span className="text-yellow-300 text-2xl font-black uppercase tracking-[0.35em]"
+                  style={{
+                    fontFamily: "'Nunito', sans-serif",
+                    textShadow: '0 0 12px rgba(253,224,71,0.8), 0 2px 4px rgba(0,0,0,0.5)',
+                  }}>
+                  ANO
+                </span>
+                <div className="h-px w-12 bg-gradient-to-l from-transparent to-yellow-400/80" />
+              </div>
+              <p className="text-blue-200/80 text-[11px] font-bold uppercase tracking-[0.25em]"
+                style={{ fontFamily: "'Nunito', sans-serif" }}>
+                do João Vicente
+              </p>
+            </div>
+          </div>
+
+          {/* Barra inferior decorativa */}
+          <div className="w-full h-1 mt-1" style={{
+            background: 'linear-gradient(90deg, transparent, #dc2626 20%, #2563eb 50%, #dc2626 80%, transparent)',
+          }} />
+
+          {/* CSS animations inline */}
+          <style jsx>{`
+            @keyframes floatNum {
+              0%, 100% { transform: translateY(0px); }
+              50% { transform: translateY(-8px); }
+            }
+            @keyframes twinkle {
+              0% { opacity: 0.3; transform: scale(0.8) rotate(0deg); }
+              100% { opacity: 1; transform: scale(1.2) rotate(15deg); }
+            }
+          `}</style>
         </div>
 
         {/* --- CARD DE INFORMAÇÕES --- */}
