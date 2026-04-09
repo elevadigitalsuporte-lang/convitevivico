@@ -4,12 +4,7 @@ import { useState } from 'react'
 import { supabase } from '@/lib/supabase'
 
 export default function Home() {
-  const [formData, setFormData] = useState({
-    nome_titular: '',
-    qtd_acompanhantes: 0,
-    qtd_filhos: 0
-  })
-
+  const [nome, setNome] = useState('')
   const [status, setStatus] = useState({ type: '', msg: '' })
   const [loading, setLoading] = useState(false)
 
@@ -17,20 +12,13 @@ export default function Home() {
     e.preventDefault()
     setLoading(true)
     setStatus({ type: '', msg: '' })
-
     try {
       const { error } = await supabase
         .from('convite_evento_rsvp')
-        .insert([{
-          nome_titular: formData.nome_titular,
-          qtd_acompanhantes: parseInt(formData.qtd_acompanhantes),
-          qtd_filhos: parseInt(formData.qtd_filhos)
-        }])
-
+        .insert([{ nome_titular: nome, qtd_acompanhantes: 0, qtd_filhos: 0 }])
       if (error) throw error
-
       setStatus({ type: 'success', msg: '✅ Presença confirmada! Te vejo na festa!' })
-      setFormData({ nome_titular: '', qtd_acompanhantes: 0, qtd_filhos: 0 })
+      setNome('')
     } catch (err) {
       console.error(err)
       setStatus({ type: 'error', msg: '❌ Algo deu errado. Tente novamente!' })
@@ -40,306 +28,417 @@ export default function Home() {
   }
 
   return (
-    <main className="min-h-screen bg-slate-100 flex flex-col items-center font-sans overflow-x-hidden">
+    <main style={{ minHeight: '100svh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#06091a' }}>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800;900&display=swap');
 
-      {/* =============================================
-          BLOCO 1: O CONVITE COM FUNDO DA CIDADE
-          ============================================= */}
-      <div
-        className="w-full max-w-md relative flex flex-col items-center overflow-hidden shadow-2xl"
-        style={{
-          backgroundImage: "url('/fundo-cidade.jpg')",
-          backgroundSize: 'cover',
-          backgroundPosition: 'center top',
-          backgroundRepeat: 'no-repeat',
-        }}
-      >
-        {/* Overlay gradiente para melhorar legibilidade mantendo a cidade viva */}
-        <div className="absolute inset-0 bg-gradient-to-b from-sky-500/30 via-transparent to-blue-900/80 pointer-events-none" />
+        * { box-sizing: border-box; margin: 0; padding: 0; }
 
-        {/* --- TOPO: Logo + Spidey na teia --- */}
-        <div className="relative w-full flex justify-between items-start pt-6 px-4 z-10">
-          {/* Spidey descendo da teia, canto esquerdo */}
-          <img
-            src="/spidey-teia.png"
-            alt="Spidey na Teia"
-            className="w-28 object-contain drop-shadow-lg"
-            style={{ filter: 'drop-shadow(0 4px 12px rgba(0,0,0,0.4))' }}
-          />
-          {/* Logo da aranha no centro/direita discreta */}
-          <img
-            src="/logo-aranha.png"
-            alt="Logo Aranha"
-            className="w-12 h-12 object-contain opacity-90 mt-2 mr-2"
-          />
-        </div>
+        .invite-card {
+          width: 100%;
+          max-width: 390px;
+          min-height: 100svh;
+          background: linear-gradient(180deg, #04122e 0%, #091a4a 30%, #091a4a 55%, #080d28 80%, #04091a 100%);
+          position: relative;
+          overflow: hidden;
+          display: flex;
+          flex-direction: column;
+          font-family: 'Nunito', sans-serif;
+        }
 
-        {/* --- MENSAGEM DO CONVITE --- */}
-        <div className="relative z-10 mx-5 mt-3 mb-4 bg-white/85 backdrop-blur-sm rounded-3xl px-6 py-5 shadow-lg border border-white/60">
-          <p className="text-gray-800 text-[15px] leading-relaxed text-center font-medium"
-            style={{ fontFamily: "'Nunito', sans-serif" }}>
-            Diretamente da minha teia para você!<br />
-            Estou completando <span className="text-red-600 font-black text-lg">1 aninho</span> e preciso de heróis e heroínas para essa grande aventura.<br />
-            <span className="font-bold text-blue-800">Venha comemorar comigo esse dia especial!</span>
-          </p>
-        </div>
+        /* ── Teias de aranha nos 4 cantos ── */
+        .web-corner {
+          position: absolute;
+          width: 100px;
+          height: 100px;
+          opacity: 0.55;
+          z-index: 2;
+        }
+        .web-tl { top: 0; left: 0; }
+        .web-tr { top: 0; right: 0; transform: scaleX(-1); }
+        .web-bl { bottom: 140px; left: 0; transform: scaleY(-1); }
+        .web-br { bottom: 140px; right: 0; transform: scale(-1,-1); }
 
-        {/* --- FAIXA DO NOME (RIBBON AZUL) --- */}
-        <div className="relative z-10 w-full py-4 bg-blue-600 border-t-4 border-b-4 border-red-500 shadow-xl">
-          <h1 className="text-white text-4xl font-black text-center tracking-widest uppercase"
-            style={{
-              textShadow: '3px 3px 0px #991b1b, 5px 5px 0px rgba(0,0,0,0.3)',
-              fontFamily: "'Nunito', sans-serif"
-            }}>
-            JOÃO VICENTE
-          </h1>
-        </div>
+        /* ── Pontinha de banda de pontinhos do topo ── */
+        .top-dots {
+          width: 100%;
+          text-align: center;
+          font-size: 22px;
+          letter-spacing: 2px;
+          color: #fff;
+          padding: 6px 0 4px;
+          position: relative;
+          z-index: 3;
+          text-shadow: 0 0 8px rgba(220,38,38,0.7);
+        }
 
-        {/* --- SEÇÃO 1 ANO - HERO VISUAL --- */}
-        <div className="relative z-10 w-full overflow-hidden" style={{ background: 'linear-gradient(180deg, #0a1628 0%, #0d2461 40%, #1a0a2e 100%)' }}>
+        /* ── Spidey Baby topo-esquerda ── */
+        .spidey-top-left {
+          position: absolute;
+          top: -6px;
+          left: -2px;
+          width: 110px;
+          object-fit: contain;
+          filter: drop-shadow(0 4px 14px rgba(220,38,38,0.5));
+          z-index: 4;
+          animation: float1 3.5s ease-in-out infinite;
+        }
+        /* ── Spidey Baby topo-direita ── */
+        .spidey-top-right {
+          position: absolute;
+          top: -4px;
+          right: 0px;
+          width: 90px;
+          object-fit: contain;
+          filter: drop-shadow(0 4px 14px rgba(220,38,38,0.5));
+          z-index: 4;
+          transform: scaleX(-1);
+          animation: float2 4s ease-in-out infinite;
+        }
 
-          {/* Radial glow central */}
-          <div className="absolute inset-0 pointer-events-none" style={{
-            background: 'radial-gradient(ellipse 70% 60% at 50% 55%, rgba(220,38,38,0.35) 0%, rgba(37,99,235,0.25) 50%, transparent 100%)'
-          }} />
+        @keyframes float1 {
+          0%,100% { transform: translateY(0px); }
+          50% { transform: translateY(-7px); }
+        }
+        @keyframes float2 {
+          0%,100% { transform: scaleX(-1) translateY(0px); }
+          50% { transform: scaleX(-1) translateY(-5px); }
+        }
+        @keyframes floatBottom {
+          0%,100% { transform: translateY(0px); }
+          50% { transform: translateY(-6px); }
+        }
+        @keyframes pulse-glow {
+          0%,100% { opacity: 0.6; }
+          50% { opacity: 1; }
+        }
 
-          {/* Teia decorativa SVG - canto esquerdo */}
-          <svg className="absolute left-0 top-0 w-28 h-28 opacity-20" viewBox="0 0 100 100" fill="none">
-            <line x1="50" y1="0" x2="0" y2="100" stroke="white" strokeWidth="0.8"/>
-            <line x1="50" y1="0" x2="50" y2="100" stroke="white" strokeWidth="0.8"/>
-            <line x1="50" y1="0" x2="100" y2="100" stroke="white" strokeWidth="0.8"/>
-            <path d="M50 15 Q25 30 10 50 Q25 70 50 80 Q75 70 90 50 Q75 30 50 15Z" stroke="white" strokeWidth="0.6" fill="none"/>
-            <path d="M50 30 Q30 40 22 55 Q30 70 50 75 Q70 70 78 55 Q70 40 50 30Z" stroke="white" strokeWidth="0.6" fill="none"/>
-          </svg>
+        /* ── Área central com o nome ── */
+        .hero-section {
+          position: relative;
+          z-index: 3;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          padding-top: 80px;
+          padding-bottom: 4px;
+        }
 
-          {/* Teia decorativa SVG - canto direito */}
-          <svg className="absolute right-0 top-0 w-28 h-28 opacity-20" viewBox="0 0 100 100" fill="none" style={{ transform: 'scaleX(-1)' }}>
-            <line x1="50" y1="0" x2="0" y2="100" stroke="white" strokeWidth="0.8"/>
-            <line x1="50" y1="0" x2="50" y2="100" stroke="white" strokeWidth="0.8"/>
-            <line x1="50" y1="0" x2="100" y2="100" stroke="white" strokeWidth="0.8"/>
-            <path d="M50 15 Q25 30 10 50 Q25 70 50 80 Q75 70 90 50 Q75 30 50 15Z" stroke="white" strokeWidth="0.6" fill="none"/>
-            <path d="M50 30 Q30 40 22 55 Q30 70 50 75 Q70 70 78 55 Q70 40 50 30Z" stroke="white" strokeWidth="0.6" fill="none"/>
-          </svg>
+        .invite-text {
+          color: #c5d8ff;
+          font-size: 10.5px;
+          font-weight: 700;
+          text-align: center;
+          letter-spacing: 0.08em;
+          text-transform: uppercase;
+          margin-bottom: 6px;
+        }
 
-          {/* Estrelinhas decorativas */}
-          {[
-            { top: '10%', left: '12%', size: 18, delay: '0s' },
-            { top: '20%', left: '80%', size: 14, delay: '0.4s' },
-            { top: '65%', left: '8%', size: 12, delay: '0.8s' },
-            { top: '70%', left: '85%', size: 16, delay: '0.2s' },
-            { top: '45%', left: '90%', size: 10, delay: '1s' },
-            { top: '50%', left: '5%', size: 11, delay: '0.6s' },
-          ].map((star, i) => (
-            <div key={i} className="absolute pointer-events-none" style={{
-              top: star.top, left: star.left,
-              animation: `twinkle 2s ease-in-out infinite alternate`,
-              animationDelay: star.delay,
-            }}>
-              <svg width={star.size} height={star.size} viewBox="0 0 24 24" fill="none">
-                <path d="M12 2L13.5 9.5L21 11L13.5 12.5L12 20L10.5 12.5L3 11L10.5 9.5L12 2Z" fill="#FFD700" opacity="0.9"/>
-              </svg>
-            </div>
-          ))}
+        /* nome principal estilo comic */
+        .name-block {
+          position: relative;
+          text-align: center;
+          margin: 0 12px;
+        }
+        .name-main {
+          font-size: clamp(46px, 13vw, 56px);
+          font-weight: 900;
+          text-transform: uppercase;
+          letter-spacing: 0.02em;
+          line-height: 0.9;
+          color: #fff;
+          -webkit-text-stroke: 2.5px #b91c1c;
+          text-shadow:
+            4px 4px 0 #991b1b,
+            6px 6px 0 rgba(0,0,0,0.45),
+            0 0 30px rgba(220,38,38,0.6);
+          display: block;
+        }
+        .name-sub {
+          font-size: clamp(18px, 5.5vw, 22px);
+          font-weight: 900;
+          text-transform: uppercase;
+          letter-spacing: 0.3em;
+          color: #f0c040;
+          text-shadow: 2px 2px 0 #92600a, 0 0 12px rgba(253,224,71,0.7);
+          display: block;
+          margin-top: 2px;
+        }
 
-          {/* Badge "PRIMEIRO ANIVERSÁRIO" */}
-          <div className="relative flex justify-center pt-5 pb-1">
-            <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-5 py-1.5">
-              <span className="text-sm">🕷️</span>
-              <span className="text-white/90 text-xs font-black uppercase tracking-[0.2em]" style={{ fontFamily: "'Nunito', sans-serif" }}>
-                Primeiro Aniversário
-              </span>
-              <span className="text-sm">🕷️</span>
-            </div>
+        /* Faixa vermelha abaixo do nome */
+        .red-strip {
+          width: 100%;
+          background: linear-gradient(90deg, #7f1d1d, #dc2626 30%, #dc2626 70%, #7f1d1d);
+          padding: 5px 0;
+          text-align: center;
+          font-size: 10px;
+          font-weight: 900;
+          letter-spacing: 0.3em;
+          color: #fff;
+          text-transform: uppercase;
+          position: relative;
+          z-index: 3;
+          border-top: 2px solid #450a0a;
+          border-bottom: 2px solid #450a0a;
+          margin-top: 8px;
+        }
+
+        /* ── Card de data/hora/local estilo do modelo ── */
+        .info-card {
+          position: relative;
+          z-index: 3;
+          margin: 10px 16px 0;
+          border: 2px solid #b91c1c;
+          border-radius: 12px;
+          background: rgba(4,18,46,0.85);
+          display: flex;
+          align-items: stretch;
+          overflow: hidden;
+          box-shadow: 0 0 20px rgba(220,38,38,0.3), inset 0 0 12px rgba(37,99,235,0.1);
+        }
+        .info-col {
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          padding: 10px 6px;
+          gap: 1px;
+        }
+        .info-col + .info-col {
+          border-left: 1.5px solid #b91c1c;
+        }
+        .info-label {
+          font-size: 8.5px;
+          font-weight: 900;
+          letter-spacing: 0.15em;
+          text-transform: uppercase;
+          color: #93c5fd;
+        }
+        .info-value {
+          font-size: 14px;
+          font-weight: 900;
+          color: #fff;
+          text-align: center;
+          line-height: 1.1;
+        }
+        .info-day {
+          font-size: 38px;
+          font-weight: 900;
+          color: #fff;
+          line-height: 1;
+          text-shadow: 0 0 16px rgba(220,38,38,0.7);
+        }
+
+        /* ── Spidey baby agachado embaixo  ── */
+        .spidey-bottom {
+          position: relative;
+          z-index: 3;
+          display: flex;
+          justify-content: center;
+          margin-top: 4px;
+          flex: 1;
+          align-items: flex-end;
+        }
+        .spidey-bottom img {
+          height: 130px;
+          object-fit: contain;
+          filter: drop-shadow(0 -4px 20px rgba(37,99,235,0.5)) drop-shadow(0 4px 12px rgba(0,0,0,0.7));
+          animation: floatBottom 3.2s ease-in-out infinite;
+        }
+
+        /* ── RSVP Form compacto ── */
+        .rsvp-section {
+          position: relative;
+          z-index: 3;
+          padding: 8px 16px 14px;
+          background: rgba(4,9,26,0.6);
+          backdrop-filter: blur(4px);
+          border-top: 1.5px solid rgba(37,99,235,0.3);
+        }
+        .rsvp-title {
+          text-align: center;
+          font-size: 11px;
+          font-weight: 900;
+          text-transform: uppercase;
+          letter-spacing: 0.2em;
+          color: #93c5fd;
+          margin-bottom: 6px;
+        }
+        .rsvp-row {
+          display: flex;
+          gap: 8px;
+          align-items: center;
+        }
+        .rsvp-input {
+          flex: 1;
+          background: rgba(255,255,255,0.08);
+          border: 1.5px solid rgba(37,99,235,0.5);
+          border-radius: 10px;
+          padding: 8px 12px;
+          font-size: 13px;
+          font-weight: 700;
+          color: #fff;
+          font-family: 'Nunito', sans-serif;
+          outline: none;
+          transition: border-color 0.2s;
+        }
+        .rsvp-input::placeholder { color: rgba(255,255,255,0.35); }
+        .rsvp-input:focus { border-color: #dc2626; }
+        .rsvp-btn {
+          background: linear-gradient(135deg, #dc2626, #991b1b);
+          color: #fff;
+          font-family: 'Nunito', sans-serif;
+          font-size: 12px;
+          font-weight: 900;
+          text-transform: uppercase;
+          letter-spacing: 0.1em;
+          border: none;
+          border-radius: 10px;
+          padding: 8px 14px;
+          cursor: pointer;
+          white-space: nowrap;
+          box-shadow: 0 3px 12px rgba(220,38,38,0.5);
+          transition: transform 0.15s, box-shadow 0.15s;
+        }
+        .rsvp-btn:hover { transform: translateY(-1px); box-shadow: 0 5px 16px rgba(220,38,38,0.6); }
+        .rsvp-btn:active { transform: translateY(1px); }
+        .rsvp-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+        .rsvp-msg {
+          font-size: 11px;
+          font-weight: 700;
+          text-align: center;
+          margin-top: 5px;
+          border-radius: 8px;
+          padding: 4px 8px;
+        }
+        .rsvp-msg.success { background: rgba(21,128,61,0.25); color: #4ade80; }
+        .rsvp-msg.error   { background: rgba(185,28,28,0.25); color: #f87171; }
+
+        /* city glow overlay no fundo */
+        .city-glow {
+          position: absolute;
+          bottom: 130px;
+          left: 0; right: 0;
+          height: 120px;
+          background: linear-gradient(0deg, rgba(37,99,235,0.18) 0%, transparent 100%);
+          pointer-events: none;
+          z-index: 1;
+        }
+        .radial-glow {
+          position: absolute;
+          top: 60px;
+          left: 50%;
+          transform: translateX(-50%);
+          width: 280px;
+          height: 280px;
+          border-radius: 50%;
+          background: radial-gradient(circle, rgba(220,38,38,0.18) 0%, rgba(37,99,235,0.1) 50%, transparent 70%);
+          pointer-events: none;
+          z-index: 1;
+          animation: pulse-glow 4s ease-in-out infinite;
+        }
+      `}</style>
+
+      <div className="invite-card">
+
+        {/* Glow radial de fundo */}
+        <div className="radial-glow" />
+        <div className="city-glow" />
+
+        {/* ── Teias nos cantos ── */}
+        <WebCorner className="web-corner web-tl" />
+        <WebCorner className="web-corner web-tr" />
+        <WebCorner className="web-corner web-bl" />
+        <WebCorner className="web-corner web-br" />
+
+        {/* ── Spideys no topo ── */}
+        <img src="/spidey-teia.png" alt="Spidey" className="spidey-top-left" />
+        <img src="/spidey.png.png" alt="Spidey" className="spidey-top-right" />
+
+        {/* ── Pontinhos do topo ── */}
+        <div className="top-dots">• • • • • • • • • • • • • • • • • • • • • • • •</div>
+
+        {/* ── Nome Hero ── */}
+        <div className="hero-section">
+          <p className="invite-text">🕷️ você foi convidado para participar dessa aventura! 🕷️</p>
+          <div className="name-block">
+            <span className="name-main">JOÃO</span>
+            <span className="name-main">VICENTE</span>
+            <span className="name-sub">UM ANO</span>
           </div>
-
-          {/* Número 1 centralizado com glow */}
-          <div className="relative flex justify-center items-center py-2">
-            {/* Anel de glow atrás do número */}
-            <div className="absolute w-44 h-44 rounded-full" style={{
-              background: 'radial-gradient(circle, rgba(220,38,38,0.5) 0%, rgba(37,99,235,0.3) 50%, transparent 70%)',
-              filter: 'blur(20px)',
-            }} />
-            <img
-              src="/numero-1.png"
-              alt="1 Aninho"
-              className="relative h-40 object-contain"
-              style={{
-                filter: 'drop-shadow(0 0 20px rgba(220,38,38,0.8)) drop-shadow(0 0 40px rgba(37,99,235,0.5)) drop-shadow(0 8px 16px rgba(0,0,0,0.6))',
-                animation: 'floatNum 3s ease-in-out infinite',
-              }}
-            />
-          </div>
-
-          {/* Label "ANO" em destaque */}
-          <div className="relative flex justify-center pb-2">
-            <div className="flex flex-col items-center gap-1">
-              <div className="flex items-center gap-3">
-                <div className="h-px w-12 bg-gradient-to-r from-transparent to-yellow-400/80" />
-                <span className="text-yellow-300 text-2xl font-black uppercase tracking-[0.35em]"
-                  style={{
-                    fontFamily: "'Nunito', sans-serif",
-                    textShadow: '0 0 12px rgba(253,224,71,0.8), 0 2px 4px rgba(0,0,0,0.5)',
-                  }}>
-                  ANO
-                </span>
-                <div className="h-px w-12 bg-gradient-to-l from-transparent to-yellow-400/80" />
-              </div>
-              <p className="text-blue-200/80 text-[11px] font-bold uppercase tracking-[0.25em]"
-                style={{ fontFamily: "'Nunito', sans-serif" }}>
-                do João Vicente
-              </p>
-            </div>
-          </div>
-
-          {/* Barra inferior decorativa */}
-          <div className="w-full h-1 mt-1" style={{
-            background: 'linear-gradient(90deg, transparent, #dc2626 20%, #2563eb 50%, #dc2626 80%, transparent)',
-          }} />
-
-          {/* CSS animations inline */}
-          <style jsx>{`
-            @keyframes floatNum {
-              0%, 100% { transform: translateY(0px); }
-              50% { transform: translateY(-8px); }
-            }
-            @keyframes twinkle {
-              0% { opacity: 0.3; transform: scale(0.8) rotate(0deg); }
-              100% { opacity: 1; transform: scale(1.2) rotate(15deg); }
-            }
-          `}</style>
         </div>
 
-        {/* --- CARD DE INFORMAÇÕES --- */}
-        <div className="relative z-10 mx-5 mb-4 w-[calc(100%-2.5rem)] bg-white/90 backdrop-blur-md rounded-3xl px-6 py-5 shadow-xl border-2 border-white/80">
-          <div className="text-center space-y-2">
-            <div className="flex items-center justify-center gap-3">
-              <span className="text-2xl">📅</span>
-              <p style={{ fontFamily: "'Nunito', sans-serif" }} className="text-blue-900 text-xl font-extrabold">
-                21 de Junho
-              </p>
-            </div>
-            <div className="flex items-center justify-center gap-3">
-              <span className="text-2xl">⏰</span>
-              <p style={{ fontFamily: "'Nunito', sans-serif" }} className="text-blue-900 text-xl font-extrabold">
-                15:00 horas
-              </p>
-            </div>
-            <div className="pt-3 mt-3 border-t-2 border-dashed border-blue-200">
-              <span className="text-2xl block mb-1">📍</span>
-              <p style={{ fontFamily: "'Nunito', sans-serif" }} className="text-red-600 font-extrabold text-lg leading-snug">
-                Avenida Terra Nova, 502
-              </p>
-              <p style={{ fontFamily: "'Nunito', sans-serif" }} className="text-gray-500 font-bold text-sm uppercase tracking-widest">
-                Salão de Festas
-              </p>
-            </div>
+        {/* ── Faixa vermelha ── */}
+        <div className="red-strip">🕸️ &nbsp; Baby Spider &nbsp; 🕸️</div>
+
+        {/* ── Card de data/hora/local ── */}
+        <div className="info-card">
+          <div className="info-col">
+            <span className="info-label">Junho</span>
+            <span className="info-label">às 15 horas</span>
+          </div>
+          <div className="info-col" style={{ flex: '0 0 64px' }}>
+            <span className="info-day">21</span>
+          </div>
+          <div className="info-col">
+            <span className="info-label">Sábado</span>
+            <span className="info-value" style={{ fontSize: '10px', letterSpacing: '0.05em' }}>Av. Terra Nova, 502</span>
           </div>
         </div>
 
-        {/* --- SPIDEY AGACHADO --- */}
-        <div className="relative z-10 w-full flex justify-center pb-6">
-          <img
-            src="/spidey-agachado.png"
-            alt="Spidey Baby"
-            className="h-44 object-contain drop-shadow-2xl"
-          />
-        </div>
-      </div>
-
-      {/* =============================================
-          BLOCO 2: FORMULÁRIO RSVP (FUNDO NEUTRO)
-          ============================================= */}
-      <div className="w-full max-w-md bg-slate-100 px-5 pt-8 pb-12">
-
-        {/* Linha decorativa com ícone */}
-        <div className="flex items-center gap-3 mb-6">
-          <div className="flex-1 h-[2px] bg-gray-300 rounded-full"></div>
-          <span className="text-2xl">🕷️</span>
-          <div className="flex-1 h-[2px] bg-gray-300 rounded-full"></div>
+        {/* ── Spidey agachado ── */}
+        <div className="spidey-bottom">
+          <img src="/spidey-agachado.png" alt="Spidey Baby" />
         </div>
 
-        {/* Card do Formulário */}
-        <div className="bg-white rounded-3xl shadow-lg border border-gray-200 p-7">
-          <h2
-            className="text-2xl font-black text-center text-red-600 mb-1 uppercase tracking-wide"
-            style={{ fontFamily: "'Nunito', sans-serif" }}
-          >
-            Confirmar Presença
-          </h2>
-          <p className="text-center text-gray-400 text-sm mb-6 font-medium">
-            Preencha os dados abaixo para confirmar
-          </p>
-
-          {status.msg && (
-            <div className={`p-4 rounded-2xl mb-5 text-center text-sm font-bold ${status.type === 'success' ? 'bg-green-50 text-green-700 border border-green-200' : 'bg-red-50 text-red-700 border border-red-200'}`}>
-              {status.msg}
-            </div>
-          )}
-
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <label className="block text-xs font-extrabold text-gray-500 mb-1.5 uppercase tracking-widest">
-                Nome do Responsável
-              </label>
+        {/* ── RSVP compacto ── */}
+        <div className="rsvp-section">
+          <p className="rsvp-title">🕸️ Confirmar Presença 🕸️</p>
+          <form onSubmit={handleSubmit}>
+            <div className="rsvp-row">
               <input
+                id="rsvp-name"
+                className="rsvp-input"
                 type="text"
                 required
-                placeholder="Ex: Maria Parker"
-                className="w-full border-2 border-gray-200 rounded-2xl px-4 py-3.5 focus:outline-none focus:border-red-400 focus:ring-4 focus:ring-red-50 transition-all text-gray-800 font-semibold text-base bg-gray-50"
-                value={formData.nome_titular}
-                onChange={(e) => setFormData({ ...formData, nome_titular: e.target.value })}
+                placeholder="Seu nome..."
+                value={nome}
+                onChange={e => setNome(e.target.value)}
               />
+              <button id="rsvp-submit" className="rsvp-btn" type="submit" disabled={loading}>
+                {loading ? '...' : 'Confirmar'}
+              </button>
             </div>
-
-            <div className="grid grid-cols-2 gap-3">
-              <div>
-                <label className="block text-xs font-extrabold text-gray-500 mb-1.5 uppercase tracking-widest text-center">
-                  Adultos
-                </label>
-                <input
-                  type="number"
-                  min="0"
-                  required
-                  className="w-full border-2 border-gray-200 rounded-2xl px-3 py-3.5 focus:outline-none focus:border-blue-400 focus:ring-4 focus:ring-blue-50 transition-all text-center text-2xl font-black text-gray-800 bg-gray-50"
-                  value={formData.qtd_acompanhantes}
-                  onChange={(e) => setFormData({ ...formData, qtd_acompanhantes: e.target.value })}
-                />
-              </div>
-              <div>
-                <label className="block text-xs font-extrabold text-gray-500 mb-1.5 uppercase tracking-widest text-center">
-                  Crianças
-                </label>
-                <input
-                  type="number"
-                  min="0"
-                  required
-                  className="w-full border-2 border-gray-200 rounded-2xl px-3 py-3.5 focus:outline-none focus:border-blue-400 focus:ring-4 focus:ring-blue-50 transition-all text-center text-2xl font-black text-gray-800 bg-gray-50"
-                  value={formData.qtd_filhos}
-                  onChange={(e) => setFormData({ ...formData, qtd_filhos: e.target.value })}
-                />
-              </div>
-            </div>
-
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full bg-red-600 hover:bg-red-700 disabled:opacity-60 disabled:cursor-not-allowed text-white font-black text-lg py-4 rounded-2xl shadow-lg hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0 active:shadow-md transition-all mt-2 uppercase tracking-widest flex justify-center gap-2 items-center"
-            >
-              {loading ? (
-                <>
-                  <svg className="animate-spin w-5 h-5" fill="none" viewBox="0 0 24 24">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
-                  </svg>
-                  Enviando...
-                </>
-              ) : (
-                <>Confirmar Presença 🕸️</>
-              )}
-            </button>
+            {status.msg && (
+              <div className={`rsvp-msg ${status.type}`}>{status.msg}</div>
+            )}
           </form>
         </div>
       </div>
     </main>
+  )
+}
+
+/* SVG de teia de aranha nos cantos */
+function WebCorner({ className }) {
+  return (
+    <svg className={className} viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <line x1="0" y1="0" x2="100" y2="0" stroke="white" strokeWidth="0.8"/>
+      <line x1="0" y1="0" x2="0" y2="100" stroke="white" strokeWidth="0.8"/>
+      <line x1="0" y1="0" x2="100" y2="100" stroke="white" strokeWidth="1"/>
+      <line x1="0" y1="0" x2="70" y2="100" stroke="white" strokeWidth="0.7"/>
+      <line x1="0" y1="0" x2="100" y2="70" stroke="white" strokeWidth="0.7"/>
+      <line x1="0" y1="0" x2="40" y2="100" stroke="white" strokeWidth="0.6"/>
+      <line x1="0" y1="0" x2="100" y2="40" stroke="white" strokeWidth="0.6"/>
+      <path d="M0 20 Q10 10 20 0" stroke="white" strokeWidth="0.7" fill="none"/>
+      <path d="M0 40 Q20 20 40 0" stroke="white" strokeWidth="0.7" fill="none"/>
+      <path d="M0 60 Q30 30 60 0" stroke="white" strokeWidth="0.7" fill="none"/>
+      <path d="M0 80 Q40 40 80 0" stroke="white" strokeWidth="0.8" fill="none"/>
+      <path d="M0 100 Q50 50 100 0" stroke="white" strokeWidth="0.9" fill="none"/>
+      <path d="M20 100 Q60 60 100 20" stroke="white" strokeWidth="0.7" fill="none"/>
+      <path d="M40 100 Q70 70 100 40" stroke="white" strokeWidth="0.7" fill="none"/>
+      <path d="M60 100 Q80 80 100 60" stroke="white" strokeWidth="0.6" fill="none"/>
+    </svg>
   )
 }
