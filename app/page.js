@@ -138,22 +138,21 @@ export default function Home() {
         .name-block {
           position: relative;
           text-align: center;
-          margin: 0 12px;
+          margin: 0 8px;
+          white-space: nowrap;
         }
         .name-main {
-          font-size: clamp(46px, 13vw, 56px);
+          font-size: clamp(30px, 8.5vw, 38px);
           font-weight: 900;
           font-family: 'HomemAranha', 'Nunito', sans-serif;
           text-transform: uppercase;
-          letter-spacing: 0.02em;
-          line-height: 0.9;
+          letter-spacing: 0.03em;
+          line-height: 1;
           color: #fff;
-          -webkit-text-stroke: 2.5px #b91c1c;
           text-shadow:
-            4px 4px 0 #991b1b,
-            6px 6px 0 rgba(0,0,0,0.45),
-            0 0 30px rgba(220,38,38,0.6);
-          display: block;
+            3px 3px 0 #000,
+            5px 5px 0 rgba(0,0,0,0.5);
+          display: inline;
         }
         /* ── Bloco de idade 1 ANO ── */
         .age-block {
@@ -169,11 +168,9 @@ export default function Home() {
           font-family: 'HomemAranha', 'Nunito', sans-serif;
           line-height: 0.85;
           color: #fff;
-          -webkit-text-stroke: 3px #dc2626;
           text-shadow:
-            4px 4px 0 #991b1b,
-            8px 8px 0 rgba(0,0,0,0.5),
-            0 0 40px rgba(220,38,38,0.8);
+            3px 3px 0 #000,
+            6px 6px 0 rgba(0,0,0,0.55);
           display: block;
         }
         .age-ano {
@@ -453,8 +450,7 @@ export default function Home() {
         <div className="hero-section">
           <p className="invite-text">🕷️ você foi convidado para participar dessa aventura! 🕷️</p>
           <div className="name-block">
-            <span className="name-main">JOÃO</span>
-            <span className="name-main">VICENTE</span>
+            <span className="name-main">JOÃO VICENTE</span>
             <div className="age-block">
               <span className="age-num">1</span>
               <div className="age-ano">
