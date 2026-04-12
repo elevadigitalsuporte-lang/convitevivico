@@ -154,13 +154,48 @@ export default function Home() {
             0 0 30px rgba(220,38,38,0.6);
           display: block;
         }
-        .name-sub {
-          font-size: clamp(18px, 5.5vw, 22px);
+        /* ── Bloco de idade 1 ANO ── */
+        .age-block {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 6px;
+          margin-top: 6px;
+        }
+        .age-num {
+          font-size: clamp(72px, 20vw, 88px);
+          font-weight: 900;
+          line-height: 0.85;
+          color: #fff;
+          -webkit-text-stroke: 3px #dc2626;
+          text-shadow:
+            4px 4px 0 #991b1b,
+            8px 8px 0 rgba(0,0,0,0.5),
+            0 0 40px rgba(220,38,38,0.8);
+          display: block;
+        }
+        .age-ano {
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 0;
+        }
+        .age-ano-text {
+          font-size: clamp(26px, 7.5vw, 34px);
           font-weight: 900;
           text-transform: uppercase;
-          letter-spacing: 0.3em;
+          letter-spacing: 0.18em;
           color: #f0c040;
-          text-shadow: 2px 2px 0 #92600a, 0 0 12px rgba(253,224,71,0.7);
+          text-shadow: 2px 2px 0 #92600a, 0 0 16px rgba(253,224,71,0.8);
+          line-height: 1;
+          display: block;
+        }
+        .age-ano-sub {
+          font-size: 9px;
+          font-weight: 900;
+          letter-spacing: 0.3em;
+          text-transform: uppercase;
+          color: rgba(255,255,255,0.5);
           display: block;
           margin-top: 2px;
         }
@@ -247,23 +282,74 @@ export default function Home() {
           animation: floatBottom 3.2s ease-in-out infinite;
         }
 
-        /* ── RSVP Form compacto ── */
+        /* ── RSVP Section destacada ── */
         .rsvp-section {
           position: relative;
           z-index: 3;
-          padding: 8px 16px 14px;
-          background: rgba(4,9,26,0.6);
-          backdrop-filter: blur(4px);
-          border-top: 1.5px solid rgba(37,99,235,0.3);
+          margin: 8px 12px 14px;
+          border-radius: 18px;
+          background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+          border: 2.5px solid #fbbf24;
+          box-shadow:
+            0 0 0 4px rgba(220,38,38,0.25),
+            0 8px 32px rgba(220,38,38,0.45),
+            0 2px 8px rgba(0,0,0,0.6);
+          overflow: hidden;
+          animation: rsvp-pulse 2.5s ease-in-out infinite;
+        }
+        @keyframes rsvp-pulse {
+          0%,100% { box-shadow: 0 0 0 4px rgba(220,38,38,0.25), 0 8px 32px rgba(220,38,38,0.45), 0 2px 8px rgba(0,0,0,0.6); }
+          50%      { box-shadow: 0 0 0 7px rgba(251,191,36,0.3),  0 8px 40px rgba(220,38,38,0.7), 0 2px 8px rgba(0,0,0,0.6); }
+        }
+        .rsvp-header {
+          background: rgba(0,0,0,0.25);
+          padding: 10px 16px 8px;
+          text-align: center;
+          border-bottom: 1.5px solid rgba(255,255,255,0.15);
+        }
+        .rsvp-badge {
+          display: inline-flex;
+          align-items: center;
+          gap: 6px;
+          background: #fbbf24;
+          color: #7c2d12;
+          font-size: 9px;
+          font-weight: 900;
+          letter-spacing: 0.25em;
+          text-transform: uppercase;
+          padding: 3px 10px;
+          border-radius: 99px;
+          margin-bottom: 5px;
         }
         .rsvp-title {
-          text-align: center;
-          font-size: 11px;
+          color: #fff;
+          font-size: 17px;
           font-weight: 900;
           text-transform: uppercase;
-          letter-spacing: 0.2em;
-          color: #93c5fd;
-          margin-bottom: 6px;
+          letter-spacing: 0.12em;
+          text-shadow: 0 2px 8px rgba(0,0,0,0.4);
+          margin: 0;
+        }
+        .rsvp-subtitle {
+          color: rgba(255,255,255,0.75);
+          font-size: 10.5px;
+          font-weight: 700;
+          margin-top: 3px;
+          letter-spacing: 0.05em;
+        }
+        .rsvp-body {
+          padding: 10px 14px 14px;
+        }
+        .rsvp-label {
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          color: #fde68a;
+          font-size: 11px;
+          font-weight: 900;
+          letter-spacing: 0.15em;
+          text-transform: uppercase;
+          margin-bottom: 7px;
         }
         .rsvp-row {
           display: flex;
@@ -272,48 +358,49 @@ export default function Home() {
         }
         .rsvp-input {
           flex: 1;
-          background: rgba(255,255,255,0.08);
-          border: 1.5px solid rgba(37,99,235,0.5);
-          border-radius: 10px;
-          padding: 8px 12px;
-          font-size: 13px;
-          font-weight: 700;
-          color: #fff;
+          background: rgba(255,255,255,0.95);
+          border: 2.5px solid #fbbf24;
+          border-radius: 12px;
+          padding: 11px 14px;
+          font-size: 14px;
+          font-weight: 800;
+          color: #1e1b4b;
           font-family: 'Nunito', sans-serif;
           outline: none;
-          transition: border-color 0.2s;
+          transition: border-color 0.2s, box-shadow 0.2s;
+          box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
         }
-        .rsvp-input::placeholder { color: rgba(255,255,255,0.35); }
-        .rsvp-input:focus { border-color: #dc2626; }
+        .rsvp-input::placeholder { color: #9ca3af; font-weight: 600; }
+        .rsvp-input:focus { border-color: #fff; box-shadow: 0 0 0 3px rgba(255,255,255,0.35), inset 0 2px 4px rgba(0,0,0,0.1); }
         .rsvp-btn {
-          background: linear-gradient(135deg, #dc2626, #991b1b);
-          color: #fff;
+          background: linear-gradient(135deg, #fbbf24, #d97706);
+          color: #7c2d12;
           font-family: 'Nunito', sans-serif;
-          font-size: 12px;
+          font-size: 13px;
           font-weight: 900;
           text-transform: uppercase;
-          letter-spacing: 0.1em;
+          letter-spacing: 0.05em;
           border: none;
-          border-radius: 10px;
-          padding: 8px 14px;
+          border-radius: 12px;
+          padding: 11px 16px;
           cursor: pointer;
           white-space: nowrap;
-          box-shadow: 0 3px 12px rgba(220,38,38,0.5);
+          box-shadow: 0 4px 14px rgba(0,0,0,0.35);
           transition: transform 0.15s, box-shadow 0.15s;
         }
-        .rsvp-btn:hover { transform: translateY(-1px); box-shadow: 0 5px 16px rgba(220,38,38,0.6); }
+        .rsvp-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.4); }
         .rsvp-btn:active { transform: translateY(1px); }
         .rsvp-btn:disabled { opacity: 0.6; cursor: not-allowed; }
         .rsvp-msg {
-          font-size: 11px;
-          font-weight: 700;
+          font-size: 12px;
+          font-weight: 800;
           text-align: center;
-          margin-top: 5px;
-          border-radius: 8px;
-          padding: 4px 8px;
+          margin-top: 8px;
+          border-radius: 10px;
+          padding: 6px 10px;
         }
-        .rsvp-msg.success { background: rgba(21,128,61,0.25); color: #4ade80; }
-        .rsvp-msg.error   { background: rgba(185,28,28,0.25); color: #f87171; }
+        .rsvp-msg.success { background: rgba(21,128,61,0.3); color: #bbf7d0; border: 1px solid rgba(74,222,128,0.3); }
+        .rsvp-msg.error   { background: rgba(0,0,0,0.3); color: #fca5a5; border: 1px solid rgba(248,113,113,0.3); }
 
         /* city glow overlay no fundo */
         .city-glow {
@@ -365,7 +452,13 @@ export default function Home() {
           <div className="name-block">
             <span className="name-main">JOÃO</span>
             <span className="name-main">VICENTE</span>
-            <span className="name-sub">UM ANO</span>
+            <div className="age-block">
+              <span className="age-num">1</span>
+              <div className="age-ano">
+                <span className="age-ano-text">ANO</span>
+                <span className="age-ano-sub">do João Vicente</span>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -392,28 +485,38 @@ export default function Home() {
           <img src="/spidey-agachado.png" alt="Spidey Baby" />
         </div>
 
-        {/* ── RSVP compacto ── */}
+        {/* ── RSVP destacado ── */}
         <div className="rsvp-section">
-          <p className="rsvp-title">🕸️ Confirmar Presença 🕸️</p>
-          <form onSubmit={handleSubmit}>
-            <div className="rsvp-row">
-              <input
-                id="rsvp-name"
-                className="rsvp-input"
-                type="text"
-                required
-                placeholder="Seu nome..."
-                value={nome}
-                onChange={e => setNome(e.target.value)}
-              />
-              <button id="rsvp-submit" className="rsvp-btn" type="submit" disabled={loading}>
-                {loading ? '...' : 'Confirmar'}
-              </button>
+          <div className="rsvp-header">
+            <div className="rsvp-badge">✅ Confirmação de Presença</div>
+            <p className="rsvp-title">Você vai comparecer?</p>
+            <p className="rsvp-subtitle">Digite seu nome abaixo e confirme!</p>
+          </div>
+          <div className="rsvp-body">
+            <div className="rsvp-label">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="#fde68a"><path d="M12 2L13.5 9.5L21 11L13.5 12.5L12 20L10.5 12.5L3 11L10.5 9.5L12 2Z"/></svg>
+              Seu nome completo
             </div>
-            {status.msg && (
-              <div className={`rsvp-msg ${status.type}`}>{status.msg}</div>
-            )}
-          </form>
+            <form onSubmit={handleSubmit}>
+              <div className="rsvp-row">
+                <input
+                  id="rsvp-name"
+                  className="rsvp-input"
+                  type="text"
+                  required
+                  placeholder="Ex: Maria Parker"
+                  value={nome}
+                  onChange={e => setNome(e.target.value)}
+                />
+                <button id="rsvp-submit" className="rsvp-btn" type="submit" disabled={loading}>
+                  {loading ? '...' : 'Confirmar'}
+                </button>
+              </div>
+              {status.msg && (
+                <div className={`rsvp-msg ${status.type}`}>{status.msg}</div>
+              )}
+            </form>
+          </div>
         </div>
       </div>
     </main>
