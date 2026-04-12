@@ -143,6 +143,7 @@ export default function Home() {
         .name-main {
           font-size: clamp(46px, 13vw, 56px);
           font-weight: 900;
+          font-family: 'HomemAranha', 'Nunito', sans-serif;
           text-transform: uppercase;
           letter-spacing: 0.02em;
           line-height: 0.9;
@@ -165,6 +166,7 @@ export default function Home() {
         .age-num {
           font-size: clamp(72px, 20vw, 88px);
           font-weight: 900;
+          font-family: 'HomemAranha', 'Nunito', sans-serif;
           line-height: 0.85;
           color: #fff;
           -webkit-text-stroke: 3px #dc2626;
@@ -183,6 +185,7 @@ export default function Home() {
         .age-ano-text {
           font-size: clamp(26px, 7.5vw, 34px);
           font-weight: 900;
+          font-family: 'HomemAranha', 'Nunito', sans-serif;
           text-transform: uppercase;
           letter-spacing: 0.18em;
           color: #f0c040;
